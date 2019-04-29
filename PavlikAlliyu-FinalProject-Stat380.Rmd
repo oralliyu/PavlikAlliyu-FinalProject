@@ -482,9 +482,24 @@ https://www.nspcc.org.uk/what-we-do/childrens-stories-about-abuse/
 This website provides different childs' abuse stories. I have a collection of 5 abuse stories compiled into a word document
 
 ```{r}
-Stories <- 
-  read.delim('Child abuse stories.txt')
 
+Stories <- 
+  read.delim("Child abuse stories.txt", header = FALSE, fill = TRUE)
+
+str(Stories)
+```  
+
+```{r}
+
+Stories  <-
+  Stories$V1 %>%
+  gsub(pattern = "\\<", replacement = "")
+
+```
+
+```{r}
+
+Stories
 
 ```
 
