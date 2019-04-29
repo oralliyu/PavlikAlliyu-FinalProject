@@ -134,22 +134,25 @@ fed_data <-
 Here, we have made a table of 50 cases (same issues with states as fed_totals table) and include the variables pertaining to the number of child abuse cases that went into differing files, total number of fatalities, and the rate of child abuse fatalities per 100,0000 children. Again, even rows were removed due to a containment of excessive N/As. The remaining N/As were set to zero because they were in the files column. With observation, one can see that if you add the number of Num_agencyfile and Num_childfile for that row, that sum is the Num_fatalities column. We also have assigned a number to label each case because it will make graph visualizations in the future easier to understand. 
 
 
-
 ## Cleaning NCANDS Data By Breaking Down Tables
 
 ```{r}
+# Rename to make spreading easier
 NCANDS <-
   NCANDS %>%
   rename(Characteristic = `Characteristic Label`)
 
 ```
+In the following chunks of code, we will be filtering the different tables out of the enormous NCANDS data to clean all the tables and make them tidy. Each table has a title describing the contents of it. Each of these tables all revolve around the topic of child abuse.
+
 
 ### Make fatality_sub_type
 
 ```{r}
+# Table for child abuse fatalities by their submission type
 fatality_sub_type <-
   NCANDS %>%
-  filter(Table == "Child Fatalities by Submission Type") %>%
+  filter(Table == "Child Fatalities by Submission Type") %>% # Filter to receive desired table
   select(- "Measure") %>%
   spread(key = Characteristic, value = Value) %>%
   spread(key = Format, value = Total) %>%
@@ -158,7 +161,7 @@ fatality_sub_type <-
 fatality_sub_type <- 
   fatality_sub_type[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
               42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
-              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]  # Remove N/As
 
 fatality_sub_type[is.na(fatality_sub_type)] = 0
 
@@ -172,9 +175,10 @@ fatality_sub_type <-
 ### Make fatality_trend
 
 ```{r} 
+# Table to show the trends of child abuse fatalities
 fatality_trend <-
   NCANDS %>%
-  filter(Table == "Child Fatalities, Trend") %>%
+  filter(Table == "Child Fatalities, Trend") %>%   # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   spread(key = Year, value = `Child fatalities`) %>%
   select(- Characteristic, - Format)
@@ -184,9 +188,10 @@ fatality_trend <-
 ### Make victim_age
 
 ```{r}
+# Table to show the victims' ages 
 victim_age <-
   NCANDS %>%
-  filter(Table == "Child Victims by Age") %>%
+  filter(Table == "Child Victims by Age") %>%    # Filter to receive desired table
   spread(key = Characteristic, value = Value)
 
 victim_age <- 
@@ -212,12 +217,13 @@ victim_age <-
 
 ```
 
-### Make case_type (I'm thinking to remove this table all together. It isn't that helpful)
+### Make case_type 
 
 ```{r}
+# Table that shows the different case types and results
 case_type <-
   NCANDS %>%
-  filter(Table == "Children by Disposition") %>%
+  filter(Table == "Children by Disposition") %>%    # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   select(- `Nonvictims (duplicate count) by disposition`, -Format) %>%
   spread(key = Characteristic, value = `Victims (duplicate count) by disposition`) %>%
@@ -232,12 +238,12 @@ case_type <-
 ### Make investigation
 
 ```{r}
+# Table to show how many cases received an investigation
 investigation <-
   NCANDS %>%
   filter(Table == "Children Who Received an Investigation or Alternative Response, Trend") %>%
   spread(key = Measure, value = Value) %>%
-  select(- `Children (unique count) who received an investigation or alternative response, 
-         rate per 1,000 children`) %>%
+  select(- `Children (unique count) who received an investigation or alternative response, rate per 1,000 children`) %>%
   spread(key = Year, 
          value = `Children (unique count) who received an investigation or alternative response`)%>%
   select(- Characteristic, - Format) 
@@ -255,16 +261,17 @@ investigation <-
 ### Make mal_type 
 
 ```{r}
+# Table to show how many children suffered a specific type of abuse 
 mal_type <-
   NCANDS %>%
-  filter(Table == "Maltreatment Types of Victims") %>%
+  filter(Table == "Maltreatment Types of Victims") %>%   # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   spread(key = Characteristic, value = `Victims (unique count) by maltreatment type`)
 
 mal_type <- 
   mal_type[-c(20, 28, 41), ]
 
-mal_type[is.na(mal_type)] = 0
+mal_type[is.na(mal_type)] = 0  # Change N/As to 0 to represent no data being recorded for that year
 
 mal_type <- 
   mal_type %>%
@@ -277,9 +284,10 @@ mal_type <-
 ### Make perpetrator_tally
 
 ```{r}
+# Table to show the abuser's relationship to the victim
 perpetrator_tally <-
   NCANDS %>%
-  filter(Table == "Perpetrators by Relationship to their Victims") %>%
+  filter(Table == "Perpetrators by Relationship to their Victims") %>% # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   spread(key = Characteristic,
          value = `Perpetrators (unique count) by relationship to their victims`) %>%
@@ -301,9 +309,10 @@ perpetrator_tally <-
 ### Make perpetrator_total
 
 ```{r}
+# Table to show the amounts of perpetrators known in each year for each case
 perpetrator_total <-
   NCANDS %>%
-  filter(Table == "Perpetrators, Trend") %>%
+  filter(Table == "Perpetrators, Trend") %>% # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   select(- Format, - Characteristic) %>%
   spread(key = Year, value = `Perpetrators (unique count)`) 
@@ -318,9 +327,10 @@ perpetrator_total <-
 ### Make referral_type
 
 ```{r}
+# Table to show values for types of referrals
 referral_type <-
   NCANDS %>%
-  filter(Table == "Screened-In and Screened-Out Referrals") %>%
+  filter(Table == "Screened-In and Screened-Out Referrals") %>% # Filter to receive desired table
   spread(key = Measure, value = Value) %>%
   select(- `Referrals, percent of total`, - `Referrals, rate per 1,000 children`,
          - Format)
@@ -348,7 +358,7 @@ referral_type <-
   referral_type %>%
   rename(Screen_in = `Screened-In Referrals (Reports)`, Screen_out = `Screened-Out Referrals`)
 
-referral_type$Total <- referral_type$Screen_in + referral_type$Screen_out
+referral_type$Total <- referral_type$Screen_in + referral_type$Screen_out # Add a column that shows the total of both types of referrals
 
 ```
 
