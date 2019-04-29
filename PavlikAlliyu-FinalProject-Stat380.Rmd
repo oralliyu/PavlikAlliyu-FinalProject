@@ -1,5 +1,5 @@
 ---
-author:  Funke Alliyu and Lauryn Pavlik
+author: Funke Alliyu and Lauryn Pavlik
 date: April 30th, 2019
 title: "Stat 380 Final Project"
 output: html_notebook
@@ -24,7 +24,7 @@ NCANDS <-
 
 ```
 
-# Add Data Table One
+# Data Table One
 
 ```{r}
 # View fed data
@@ -33,7 +33,7 @@ head(raw_fed_data)
 ```
 This data set was found on data.gov.
 
-# Add Data Table Two
+# Data Table Two
 
 ```{r}
 # View NCANDS data
@@ -100,7 +100,7 @@ fed_data <-
 fed_data <- 
   fed_data[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
               42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
-              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]  # Remove even columns with all N/As
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]  # Remove even rows with all N/As
 
 ```
 
@@ -131,7 +131,7 @@ fed_data <-
                        35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50)) # Add number labels to cases for easier graph visualization
   
 ```
-Here, we have made a table of 50 cases (same issues with states as fed_totals table) and include the variables pertaining to the number of child abuse cases that went into differing files, total number of fatalities, and the rate of child abuse fatalities per 100,0000 children. Again, even rows were removed due to a containment of excessive N/As. The remaining N/As were set to zero because they were in the files column. With observation, one can see that if you add the number of Num_agencyfile and Num_childfile for that row, that sum is the Num_fatalities column. We also have assigned a number to label each case because it will make graph visualizations in the future easier to understand. 
+Here, we have made a table of 50 cases (same issues with states as fed_totals table) and included the variables pertaining to the number of child abuse cases that went into differing files, total number of fatalities, and the rate of child abuse fatalities per 100,0000 children. Again, even rows were removed due to a containment of excessive N/As. The remaining N/As were set to zero because they were in the files column. With observation, one can see that if you add the number of Num_agencyfile and Num_childfile for that row, that sum is the Num_fatalities column. We also have assigned a number to label each case because it will make graph visualizations in the future easier to understand. 
 
 
 ## Cleaning NCANDS Data By Breaking Down Tables
@@ -423,8 +423,6 @@ Graph_1 <-
   ggplot() +
   geom_line(data = All_data, aes(State_num, Num_fatalities2014, color = "Num_fatalities2014")) +
   geom_point(data = fed_data, aes(State_num, Rate_per_100000, color = "Rate_per_100000"))
-
-
 
 plot(Graph_1)
   
