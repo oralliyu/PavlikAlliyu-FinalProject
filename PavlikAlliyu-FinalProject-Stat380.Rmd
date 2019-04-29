@@ -1,0 +1,96 @@
+---
+authors:  Funke Alliyu and Lauryn Pavlik
+due date: April 30th, 2019
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r Front Matter, include=FALSE}
+# Clean up environment
+rm(list = ls())
+
+# Load packages
+library(tidyverse)
+library(readr)
+library(utils)
+
+```
+
+# Add Data Table One
+
+```{r}
+raw_fed_data <- 
+  read_csv("dif source join.csv")
+
+ head(raw_fed_data)
+
+```
+
+# Add Data Table Two
+
+```{r}
+NCANDS <- 
+  read_csv("Findings from NCANDS - Data Tables (updated with FY 2015).csv")
+
+head(NCANDS)
+
+```
+
+
+
+## Cleaning Federal Data
+
+### Making a totals table 
+
+```{r}
+# Make totals seperate table from fed_data
+fed_totals <-
+  raw_fed_data %>%
+  filter(`Measure 2` == "Total")
+
+```
+
+```{r}
+# Clean fed_totals
+fed_totals <- 
+  fed_totals %>%
+  rename(Measure_2 = 'Measure 2',  Measure_1 = 'Measure 1') %>%
+  spread(key = Format, value = Value) 
+
+```
+
+```{r}
+# Remove columns
+fed_totals <- 
+  fed_totals %>%
+  select(-'X7', -'Measure_1', -'Measure_2')
+
+```
+
+```{r}
+# Rename remaining variables
+fed_totals <- 
+  fed_totals %>%
+  rename(Num_Fatalities = 'Number', Rate_per_100000 = 'Rate per 100,000 Children')
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
