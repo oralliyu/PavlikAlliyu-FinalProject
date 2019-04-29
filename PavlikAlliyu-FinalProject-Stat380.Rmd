@@ -1,12 +1,12 @@
 ---
-authors:  Funke Alliyu and Lauryn Pavlik
-due date: April 30th, 2019
-title: "R Notebook"
+author:  Funke Alliyu and Lauryn Pavlik
+date: April 30th, 2019
+title: "Stat 380 Final Project"
 output: html_notebook
 ---
 
 
-```{r Front Matter, include=FALSE}
+```{r}
 # Clean up environment
 rm(list = ls())
 
@@ -346,7 +346,6 @@ referral_type <-
               244, 246, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274,
               276, 278, 280), ]
 
-
 referral_type<- 
   referral_type %>%
   spread(key = Characteristic, value = Referrals) %>%
@@ -411,6 +410,8 @@ All_data <-
                        35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50))
   
 ```
+Here we have joined all the relevant tables together to make one big data table for analysis. 
+
 
 # Data Visualization 
 
