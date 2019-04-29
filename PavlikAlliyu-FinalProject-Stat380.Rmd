@@ -76,11 +76,11 @@ fed_totals <-
 # Rename remaining variables
 fed_totals <- 
   fed_totals %>%
-  rename(Num_Fatalities = 'Number', Rate_per_100000 = 'Rate per 100,000 Children')
+  rename(Num_fatalities = 'Number', Rate_per_100000 = 'Rate per 100,000 Children')
 
 ```
 
-Here we have created a table containing the total number of child fatalities from each state and the child fatality rate per 100,000 children. It is important to note that data for Maine and Massachusetts were not provided, but data for Puerto Rico and the District of Columbia were provided making the total number of cases 50. 
+Here we have created a table containing the total number of child abuse fatalities from each state and the child fatality rate per 100,000 children. It is important to note that data for Maine and Massachusetts were not provided, but data for Puerto Rico and the District of Columbia were provided making the total number of cases 50. 
 
 ### Cleaning original table
 
@@ -91,22 +91,22 @@ fed_data <-
   rename(Measure_2 = 'Measure 2',  Measure_1 = 'Measure 1') %>%
   spread(key = Measure_2, value = Value) %>%
   spread(key = Format, value = Total) %>%
-  select(-`Rate per 100,000 Children`, -`X7`)
+  select(-`Rate per 100,000 Children`, -`X7`)      # Remove unimportant rows for analysis
 
 ```
 
 ```{r}
-# Remove rows (MAYBE WRITE LOOP)
+# Remove rows 
 fed_data <- 
   fed_data[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
               42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
-              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]  # Remove even columns with all N/As
 
 ```
 
 ```{r}
 # Finish cleaning
-fed_data[is.na(fed_data)] = 0
+fed_data[is.na(fed_data)] = 0     # Set useful N/As to zero
 
 fed_data <- 
   fed_data %>%
@@ -121,17 +121,17 @@ fed_data <-
 ```{r}
 # Add rates
 fed_data <-
-  full_join(fed_data, fed_totals) %>%
+  full_join(fed_data, fed_totals) %>%    # Join to add rates column into new table
   select(-Total)
 
 fed_data <- 
   fed_data %>%
   mutate(State_num = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
                        19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-                       35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50))
+                       35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50)) # Add number labels to cases for easier graph visualization
   
 ```
-
+Here, we have made a table of 50 cases (same issues with states as fed_totals table) and include the variables pertaining to the number of child abuse cases that went into differing files, total number of fatalities, and the rate of child abuse fatalities per 100,0000 children. Again, even rows were removed due to a containment of excessive N/As. The remaining N/As were set to zero because they were in the files column. With observation, one can see that if you add the number of Num_agencyfile and Num_childfile for that row, that sum is the Num_fatalities column. We also have assigned a number to label each case because it will make graph visualizations in the future easier to understand. 
 
 
 
@@ -236,8 +236,10 @@ investigation <-
   NCANDS %>%
   filter(Table == "Children Who Received an Investigation or Alternative Response, Trend") %>%
   spread(key = Measure, value = Value) %>%
-  select(- `Children (unique count) who received an investigation or alternative response, rate per 1,000 children`) %>%
-  spread(key = Year, value = `Children (unique count) who received an investigation or alternative response`) %>%
+  select(- `Children (unique count) who received an investigation or alternative response, 
+         rate per 1,000 children`) %>%
+  spread(key = Year, 
+         value = `Children (unique count) who received an investigation or alternative response`)%>%
   select(- Characteristic, - Format) 
 
 investigation <- 
@@ -373,7 +375,7 @@ All_data <-
 All_data <- 
   All_data %>%
   rename(Num_agencyfile2014 = Num_agencyfile.x, Num_childfile2014 = Num_childfile.x, 
-         Num_fatalities2014 = Num_Fatalities, Rate2014 = Rate_per_100000,
+         Num_fatalities2014 = Num_fatalities, Rate2014 = Rate_per_100000,
          Substantiated_case = Substantiated, Num_agencyfile2015 = Num_agencyfile.y,
          Num_childfile2015 = Num_childfile.y, Num_fatalities2015 = Number, 
          Num_fatalities2011 = `2011.x`, Num_fatalities2012 = `2012.x`, 
@@ -514,7 +516,7 @@ So, I am terrible at coding. Let me know if it is okay if you work on coding the
 * Use of regular expressions 
     + Trying to import article on abuse
 * User-defined functions    
-    + See if you can find a way to create a function to remove even rows, For example lines 94-96 and any others with this same issue
+    + See if you can find a way to create a function to remove even rows, For example lines 99 and any others with this same issue
 * Loops and/or control flow     
     + Use loop in function?
 
