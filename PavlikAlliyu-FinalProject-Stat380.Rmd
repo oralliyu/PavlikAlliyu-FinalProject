@@ -76,8 +76,273 @@ fed_totals <-
 
 ```
 
+### Cleaning original table
+
+```{r}
+# Rename and spread
+fed_data <- 
+  raw_fed_data %>%
+  rename(Measure_2 = 'Measure 2',  Measure_1 = 'Measure 1') %>%
+  spread(key = Measure_2, value = Value) %>%
+  spread(key = Format, value = Total) %>%
+  select(-`Rate per 100,000 Children`, -`X7`)
+
+```
+
+```{r}
+# Remove rows (MAYBE WRITE LOOP)
+fed_data <- 
+  fed_data[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
+              42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]
+
+```
+
+```{r}
+# Finish cleaning
+fed_data[is.na(fed_data)] = 0
+
+fed_data <- 
+  fed_data %>%
+  rename(Num_agencyfile = `Reported in the Agency File`, 
+         Num_childfile = `Reported in the Child File`, 
+         Total = Number) %>%
+  select(-`Measure_1`)
+  
+  
+```
+
+```{r}
+# Add rates
+fed_data <-
+  full_join(fed_data, fed_totals) %>%
+  select(-Total)
+
+fed_data <- 
+  fed_data %>%
+  mutate(State_num = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                       19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                       35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50))
+  
+```
 
 
+
+
+## Cleaning NCANDS Data By Breaking Down Tables
+
+```{r}
+NCANDS <-
+  NCANDS %>%
+  rename(Characteristic = `Characteristic Label`)
+
+```
+
+### Make fatality_sub_type
+
+```{r}
+fatality_sub_type <-
+  NCANDS %>%
+  filter(Table == "Child Fatalities by Submission Type") %>%
+  select(- "Measure") %>%
+  spread(key = Characteristic, value = Value) %>%
+  spread(key = Format, value = Total) %>%
+  select(-Rate)
+
+fatality_sub_type <- 
+  fatality_sub_type[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
+              42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100), ]
+
+fatality_sub_type[is.na(fatality_sub_type)] = 0
+
+fatality_sub_type <- 
+  fatality_sub_type %>%
+  rename(Num_agencyfile = `Reported in the Agency File`,
+         Num_childfile = `Reported in the Child File`)
+
+```
+
+### Make fatality_trend
+
+```{r} 
+fatality_trend <-
+  NCANDS %>%
+  filter(Table == "Child Fatalities, Trend") %>%
+  spread(key = Measure, value = Value) %>%
+  spread(key = Year, value = `Child fatalities`) %>%
+  select(- Characteristic, - Format)
+
+```
+
+### Make victim_age
+
+```{r}
+victim_age <-
+  NCANDS %>%
+  filter(Table == "Child Victims by Age") %>%
+  spread(key = Characteristic, value = Value)
+
+victim_age <- 
+  victim_age[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
+              42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106), ]
+
+# Remove rows that do not have a match in other tables 
+victim_age <- 
+  victim_age[-c(20, 28, 41), ]
+
+victim_age[[24]] <- NULL
+
+victim_age <- 
+  victim_age %>%
+  select(- Measure) %>%
+  rename(Age_under1 = `Age <1`, Age_1 = `Age 1`, Age_10 = `Age 10`, Age_11 = `Age 11`, 
+         Age_12 = `Age 12`, Age_13 = `Age 13`, Age_14 = `Age 14`, Age_15 = `Age 15`, 
+         Age_16 = `Age 16`, Age_17 = `Age 17`, Age_2 = `Age 2`, Age_3 = `Age 3`, 
+         Age_4 = `Age 4`, Age_5 = `Age 5`, Age_6 = `Age 6`, Age_7 = `Age 7`, 
+         Age_8 = `Age 8`, Age_9 = `Age 9`)
+
+
+```
+
+### Make case_type (I'm thinking to remove this table all together. It isn't that helpful)
+
+```{r}
+case_type <-
+  NCANDS %>%
+  filter(Table == "Children by Disposition") %>%
+  spread(key = Measure, value = Value) %>%
+  select(- `Nonvictims (duplicate count) by disposition`, -Format) %>%
+  spread(key = Characteristic, value = `Victims (duplicate count) by disposition`) %>%
+  select(- `Alternative Response`, - `Closed With No Finding`, - `Indicated`, 
+         - `Intentionally False`, - `No Alleged Maltreatment`, - `Other`, - `Unknown`, 
+         - `Unsubstantiated`)
+case_type <- 
+  case_type[-c(20, 28, 41), ]
+
+```
+
+### Make investigation
+
+```{r}
+investigation <-
+  NCANDS %>%
+  filter(Table == "Children Who Received an Investigation or Alternative Response, Trend") %>%
+  spread(key = Measure, value = Value) %>%
+  select(- `Children (unique count) who received an investigation or alternative response, rate per 1,000 children`) %>%
+  spread(key = Year, value = `Children (unique count) who received an investigation or alternative response`) %>%
+  select(- Characteristic, - Format) 
+
+investigation <- 
+  investigation[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
+              42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106), ]
+
+investigation <-
+  investigation[-c(20, 28, 41), ]
+
+```
+
+### Make mal_type 
+
+```{r}
+mal_type <-
+  NCANDS %>%
+  filter(Table == "Maltreatment Types of Victims") %>%
+  spread(key = Measure, value = Value) %>%
+  spread(key = Characteristic, value = `Victims (unique count) by maltreatment type`)
+
+mal_type <- 
+  mal_type[-c(20, 28, 41), ]
+
+mal_type[is.na(mal_type)] = 0
+
+mal_type <- 
+  mal_type %>%
+  rename(Med_neglect = `Medical Neglect`, Physical_abuse = `Physical Abuse`, 
+         Psych_abuse = `Psychological Maltreatment`, Sexual_abuse = `Sexual Abuse`) 
+
+
+```
+
+### Make perpetrator_tally
+
+```{r}
+perpetrator_tally <-
+  NCANDS %>%
+  filter(Table == "Perpetrators by Relationship to their Victims") %>%
+  spread(key = Measure, value = Value) %>%
+  spread(key = Characteristic,
+         value = `Perpetrators (unique count) by relationship to their victims`) %>%
+  select(- Format)
+
+perpetrator_tally[is.na(perpetrator_tally)] = 0
+
+perpetrator_tally <- 
+  perpetrator_tally %>%
+  rename(Daycare_provider = `Child Daycare Provider`, Foster_parent = `Foster Parent`,
+         Friend_neighbor = `Friend and Neighbor`, 
+         Group_home = `Group Home and Residential Facility Staff`,
+         Guardian = `Legal Guardian`, Multiple = `Multiple Relationships`,
+         Other_professional = `Other Professional`, 
+         Other_relative = `Other Relative`, Unmarried_partner = `Unmarried Partner of Parent`)
+
+```
+
+### Make perpetrator_total
+
+```{r}
+perpetrator_total <-
+  NCANDS %>%
+  filter(Table == "Perpetrators, Trend") %>%
+  spread(key = Measure, value = Value) %>%
+  select(- Format, - Characteristic) %>%
+  spread(key = Year, value = `Perpetrators (unique count)`) 
+
+perpetrator_total[is.na(perpetrator_total)] = 0
+
+perpetrator_total <- 
+  perpetrator_total[-c(19, 27), ]
+
+```
+
+### Make referral_type
+
+```{r}
+referral_type <-
+  NCANDS %>%
+  filter(Table == "Screened-In and Screened-Out Referrals") %>%
+  spread(key = Measure, value = Value) %>%
+  select(- `Referrals, percent of total`, - `Referrals, rate per 1,000 children`,
+         - Format)
+
+referral_type <- 
+  referral_type[-c(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,
+              42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78,
+              80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114,
+              116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142, 144, 146,
+              148, 150, 152, 154, 156, 158, 160, 162, 164, 166, 168, 170, 172, 174, 176, 178, 
+              180, 182, 184, 186, 188, 190, 192, 194, 196, 198, 200, 202, 204, 206, 208, 210,
+              212, 214, 216, 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 238, 240, 242,
+              244, 246, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274,
+              276, 278, 280), ]
+
+
+referral_type<- 
+  referral_type %>%
+  spread(key = Characteristic, value = Referrals) %>%
+  select(- Total)
+
+referral_type[is.na(referral_type)] = 0
+
+referral_type <-
+  referral_type %>%
+  rename(Screen_in = `Screened-In Referrals (Reports)`, Screen_out = `Screened-Out Referrals`)
+
+referral_type$Total <- referral_type$Screen_in + referral_type$Screen_out
+
+```
 
 
 
