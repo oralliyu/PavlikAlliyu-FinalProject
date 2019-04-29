@@ -15,28 +15,32 @@ library(tidyverse)
 library(readr)
 library(utils)
 
+# Add data 
+raw_fed_data <- 
+  read_csv("dif source join.csv")
+NCANDS <- 
+  read_csv("Findings from NCANDS - Data Tables (updated with FY 2015).csv")
+
+
 ```
 
 # Add Data Table One
 
 ```{r}
-raw_fed_data <- 
-  read_csv("dif source join.csv")
-
- head(raw_fed_data)
+# View fed data
+head(raw_fed_data)
 
 ```
+This data set was found on data.gov.
 
 # Add Data Table Two
 
 ```{r}
-NCANDS <- 
-  read_csv("Findings from NCANDS - Data Tables (updated with FY 2015).csv")
-
+# View NCANDS data
 head(NCANDS)
 
 ```
-
+This data is from https://www.acf.hhs.gov/cb/resource/child-maltreatment-2014-data-tables.
 
 
 ## Cleaning Federal Data
@@ -75,6 +79,8 @@ fed_totals <-
   rename(Num_Fatalities = 'Number', Rate_per_100000 = 'Rate per 100,000 Children')
 
 ```
+
+Here we have created a table containing the total number of child fatalities from each state and the child fatality rate per 100,000 children. It is important to note that data for Maine and Massachusetts were not provided, but data for Puerto Rico and the District of Columbia were provided making the total number of cases 50. 
 
 ### Cleaning original table
 
@@ -497,11 +503,6 @@ Stories  <-
 
 ```
 
-```{r}
-
-Stories
-
-```
 
 
 
