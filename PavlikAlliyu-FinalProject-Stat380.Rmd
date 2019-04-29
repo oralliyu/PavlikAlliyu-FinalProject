@@ -394,6 +394,45 @@ All_data <-
   
 ```
 
+# Data Visualization 
+
+## Graph 1 
+
+```{r}
+# Layered graph
+Graph_1 <- 
+  ggplot() +
+  geom_line(data = All_data, aes(State_num, Num_fatalities2014, color = "Num_fatalities2014")) +
+  geom_point(data = fed_data, aes(State_num, Rate_per_100000, color = "Rate_per_100000"))
+
+
+
+plot(Graph_1)
+  
+  
+```
+
+## Graph 2
+
+```{r}
+# Multiple variables graph 
+Graph_2 <- 
+  All_data %>%
+  ggplot() +
+  geom_point(aes(x = State_num, y = Num_fatalities2011, color = "Num_fatalities2011")) +
+  geom_point(aes(x = State_num, y = Num_fatalities2012, color = "Num_fatalities2012")) +
+  geom_point(aes(x = State_num, y = Num_fatalities2013, color = "Num_fatalities2013")) +
+  geom_point(aes(x = State_num, y = Num_fatalities2014, color = "Num_fatalities2014")) +
+  geom_point(aes(x = State_num, y = Num_fatalities2015, color = "Num_fatalities2015")) + 
+  ggtitle("Number of Child Abuse Fatalities From 2011 To 2015") +
+  xlab("Number Corresponding To State From Table") +
+  ylab("Number of Child Abuse Fatalities")
+
+plot(Graph_2)
+
+```
+
+
 
 
 
