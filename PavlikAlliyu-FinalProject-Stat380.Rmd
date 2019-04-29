@@ -485,7 +485,6 @@ This website provides different childs' abuse stories. I have a collection of 5 
 Stories <- 
   read.delim('Child abuse stories.txt')
 
-View(Stories)
 
 ```
 
