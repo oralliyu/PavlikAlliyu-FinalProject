@@ -481,6 +481,7 @@ Graph_2 <-
 plot(Graph_2)
 
 ```
+Graph number 2 compares child fatalities across 5 years versus 1 year like graph 1. The color of dots that seem to be the highest fatality year are army green, purple, and green. These correspond to 2012, 2013, and 2015. Two state ids seem to stick out being 1 and 43, which are Alabama and Texas.
 
 ## Graph 3 
 
