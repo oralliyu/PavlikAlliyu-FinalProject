@@ -17,7 +17,7 @@ output: html_notebook
 *Description: Report includes meaningful contributions from (at least) two different data sources that are JOINED for the analysis*
 
 (A) .Rmd Line number(s) for join operation: 
-
+396-410
 
 
 ### Data Wrangling (5 of 6 required)
@@ -25,10 +25,15 @@ output: html_notebook
 *Description: Clear demonstration of proficiency should include proper use of 5 out of the following 6 topics from class: (+) general purpose data wrangling--e.g., filter, select mutate, summarise, arrange, group_by, etc. (+) spread & gather to stack/unstack variables (+) regular expressions (+) user-defined functions (+) loops and control flow (+) vectorized functions like the `apply` family, `purrr::map` or `dplyr::do`*
 
 (A) .Rmd Line number(s) for an example of general purpose data wrangling: 
+88-99
+111-122
 
 
 (B) .Rmd Line number(s) for a spread & gather (or equivalent): 
-
+94
+95
+158
+159
 
 (C) .Rmd Line number(s) for use of regular expressions: 
 
@@ -37,7 +42,9 @@ output: html_notebook
 
 
 (E) .Rmd Line number(s) for use of loops and/or control flow: 
-
+101-109
+165-174
+212-220
 
 (F) .Rmd Line number(s) for use of vectorized functions: 
 
@@ -68,7 +75,7 @@ output: html_notebook
 
 
 (B) .Rmd Line number(s) for unsupervised learning: 
-
+585-708
 
 (C) .Rmd Line number(s) for user-defined simulation(s): 
 
