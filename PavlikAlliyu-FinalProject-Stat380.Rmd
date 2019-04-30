@@ -433,11 +433,9 @@ All_data[is.na(All_data)] = 0
 All_data <- 
   All_data[-c(38, 52, 53), ]
 
-All_data <- 
-  All_data %>%
-  mutate(State_num = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-                       19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-                       35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50))
+#All_data <- 
+ # All_data %>%
+  #mutate(State_num = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50))
   
 ```
 Here we have joined all the relevant tables together to make one big data table for analysis. 
@@ -547,6 +545,7 @@ str(Stories)
 
 
 
+
 # This is what is left to do:
 
 So, I am terrible at coding. Let me know if it is okay if you work on coding the stuff below that is left. I tried to do my best with what I could. I have ideas for each, I just dont know how to write the code. If you do a lot of the coding, I can take care of explaing everything, narrarating, and the guidance document. Thanks! Also, if you can't figure the rest of the stuff out, or feel like I should do more work, let me know! just shoot me a text when you are done working and I'll go through and narrate and all that jazz. 
@@ -570,11 +569,110 @@ Can you check my graphs to make sure they meet the requirements please ?
 * Analysis of text data
 test
 
+### Unsupervised Learning
+
+Maltreatment Type by State
+
+ We want to compare states on:
+  + Medical Neglect
+  + Neglect
+  + Physical Abuse
+  + Pyschological Abuse
+  + Sexual Abuse
+  + Other
+  + Unknown
+
+```{r}
+# Add rownames so that State is not treated as a variable
+rownames(mal_type) <-
+  mal_type$State
+
+mal_analysis <-
+  mal_type %>%
+  select(- Table, - Format, - Year, -State)
+
+head(mal_analysis)
+
+```
+
+```{r}
+# Standardize vriables
+mal_pca <-
+  mal_analysis %>%
+  prcomp(scale = TRUE)
+
+# Result is a list
+str(mal_pca)
+```
+
+```{r}
+# First two principal components
+
+(-1) * mal_pca$rotation[, 1:2] %>%
+  round(2)
+
+```
+```{r}
+
+head(mal_pca$x)
+
+```
+
+### Principal Components Plot
+
+```{r}
+# Plot first two principal components
+
+mal_pca$x %>%
+  as.data.frame() %>%  # ggplot uses data frames
+  rownames_to_column() %>%
+  ggplot(aes(x = -PC1, y = -PC2)) +
+  geom_text(aes(label = rowname), size = 3)+
+  xlab("Best Vector from PCA (approx. Unknown)") +
+  ylab("2nd Best Vector from PCA (approx. Medical Neglect)") +
+  ggtitle("2-Dimensional Representation of Maltreatment by State")
+```
+
+### Circle Correlations Plot
+
+```{r}
+circle <- function(center = c(0, 0), npoints = 100) {
+    r = 1
+    tt = seq(0, 2 * pi, length = npoints)
+    xx = center[1] + r * cos(tt)
+    yy = center[1] + r * sin(tt)
+    return(data.frame(x = xx, y = yy))
+}
+corcir = circle(c(0, 0), npoints = 100)
+
+# create data frame with correlations between variables and PCs
+correlations = as.data.frame(cor(mal_analysis, mal_pca$x))
 
 
+# data frame with arrows coordinates
+arrows = data.frame(x1 = c(0, 0, 0, 0, 0, 0, 0),
+                    y1 = c(0, 0, 0, 0, 0, 0, 0),
+                    x2 = correlations$PC1,
+                    y2 = correlations$PC2)
 
-
-
+# geom_path will do open circles
+ggplot() + 
+  geom_path(data = corcir, aes(x = x, y = y),
+            colour = "gray65") + 
+    geom_segment(data = arrows,
+                 aes(x = x1, y = y1, xend = x2, yend = y2),
+                 colour = "gray65") + 
+    geom_text(data = correlations, aes(x = PC1, y = PC2,
+            label = rownames(correlations))) + 
+    geom_hline(yintercept = 0, colour = "gray65") +
+  geom_vline(xintercept = 0, 
+             colour = "gray65") + 
+  xlim(-1.1, 1.1) +
+  ylim(-1.1, 1.1) + 
+  labs(x = "pc1 aixs", 
+       
+       y = "pc2 axis") + ggtitle("Circle of correlations")
+```
 
 
 
