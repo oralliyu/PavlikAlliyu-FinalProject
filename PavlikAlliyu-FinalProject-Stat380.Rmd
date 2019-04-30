@@ -15,6 +15,9 @@ library(tidyverse)
 library(readr)
 library(utils)
 library(dplyr)
+library(tidyverse)
+library(mdsr)
+library(mosaic)
 
 # Add data 
 raw_fed_data <- 
@@ -622,7 +625,6 @@ head(mal_pca$x)
 
 ```{r}
 # Plot first two principal components
-
 mal_pca$x %>%
   as.data.frame() %>%  # ggplot uses data frames
   rownames_to_column() %>%
@@ -631,6 +633,7 @@ mal_pca$x %>%
   xlab("Best Vector from PCA (approx. Unknown)") +
   ylab("2nd Best Vector from PCA (approx. Medical Neglect)") +
   ggtitle("2-Dimensional Representation of Maltreatment by State")
+
 ```
 
 ### Circle Correlations Plot
@@ -674,11 +677,46 @@ ggplot() +
        y = "pc2 axis") + ggtitle("Circle of correlations")
 ```
 
+### Scree Plot (Maltreatment Type Data)
 
+```{r}
 
+mal_pve <- 
+  data.frame(sd = mal_pca$sdev) %>%
+  rownames_to_column() %>%
+  mutate(rowname = parse_number(rowname), 
+         totalVar = sum(mal_pca$sdev^2), 
+         pve = 100 * sd^2 / totalVar, 
+         cusum = cumsum(pve))
 
+# scree plot
+mal_pve %>%
+  ggplot(aes(x = rowname, y = pve)) + 
+  geom_line(type = 3) + 
+  xlab("Principal Component") + 
+  ylab("Proportion of Variance Explained") + 
+  ggtitle("Scree Plot of Principal Components for Maltreatment Type Data") 
 
+  
+# cumulative PVE plot
+mal_pve %>%
+  ggplot(aes(x = rowname, y = cusum)) + 
+  geom_line(type = 3) + 
+  xlab("Principal Component") + 
+  ylab("Proportion of Variance Explained") + 
+  ggtitle("Cumulative Proportion of Variance Explained for Maltreatment Type Data")
 
+```
+
+According to the PVE graph, about 4 principal components is the minimum number in order to do a good job representing the data.
+
+### Statistical Modeling
+
+Question: Which year needed the most attention?
+
+```{r}
+favstats( ~ perpetrator_total$`2011`)
+```
 
 
 
