@@ -526,6 +526,7 @@ plot(Graph_4)
 
 
 ```
+Graph 4 shows the number of victims suffering from each type of abuse over the states. The 'other' variable seems to contain the highest trend. Physical abuse and psychological abuse are the next two most common types of abuse. There seems to be little unknown abuse. Sexual abuse is still present, but not as prominent.
 
 # Article on Child Abuse 
 
