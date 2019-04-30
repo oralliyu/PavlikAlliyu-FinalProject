@@ -694,9 +694,9 @@ favstats( ~ perpetrator_total$`2011`)
 # What's left
 
 ## Data Wrangling Portion
-* Use of regular expressions 
-    + Trying to import article on abuse (DONE)
-* User-defined functions    
+* Use of regular expressions (???)
+    + Trying to import article on abuse 
+* User-defined functions or Vectorized Functions (???)  
 * Loops and/or control flow (DONE)    
     + See if you can find a way to create a function to remove even rows, For example lines 99 and any others with this same issue
 
@@ -707,9 +707,9 @@ Can you check my graphs to make sure they meet the requirements please ?
 
 ## Data Analysis
 
-* Statistical modeling/Supervised learning
+* Statistical modeling/Supervised learning 
 * Unsupervised learning (DONE)
-* Analysis of text data
+* Analysis of text data 
 
 
 
