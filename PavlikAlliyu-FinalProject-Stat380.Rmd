@@ -403,7 +403,7 @@ referral_type$Total <- referral_type$Screen_in + referral_type$Screen_out # Add 
 # Make one big messy table
 All_data <-
   fed_data %>%
-  full_join( by = "State", case_type) %>%
+  full_join(by = "State", case_type) %>%
   full_join(by = "State", fatality_sub_type) %>%
   full_join(by = "State", fatality_trend) %>%
   full_join(by = "State", investigation) %>%
@@ -452,11 +452,15 @@ Here we have joined all the relevant tables together to make one big data table 
 Graph_1 <- 
   ggplot() +
   geom_line(data = All_data, aes(State_num, Num_fatalities2014, color = "Num_fatalities2014")) +
-  geom_point(data = fed_data, aes(State_num, Rate_per_100000, color = "Rate_per_100000"))
+  geom_point(data = fed_data, aes(State_num, Rate_per_100000, color = "Rate_per_100000")) +
+  xlab("State ID") +
+  ylab("Number of Fatalities") +
+  ggtitle("2014 Fatality Data By State")
 
 plot(Graph_1)
   
 ```
+Graph number 1 compares the number of child abuse fatalities in 2014 to the rate of fatalities per 100,000 children in 2014. With observation, one can see that there are sharp spikes in the number of fatalities around certain state ids. These spikes occur around 5, 10, 21, 31, and 43, which correspond to California, Florida, Michigan, New York, and Texas. An interesting observation is that Vermont (number 45) only had 1 fatality that year. The rates at the bottom of the graph strongly follow the trend of direction with the number of fatalities as common sense would suggest. 
 
 ## Graph 2
 
@@ -644,8 +648,8 @@ ggplot() +
   xlim(-1.1, 1.1) +
   ylim(-1.1, 1.1) + 
   labs(x = "pc1 aixs", 
-       
        y = "pc2 axis") + ggtitle("Circle of correlations")
+
 ```
 
 ### Scree Plot (Maltreatment Type Data)
