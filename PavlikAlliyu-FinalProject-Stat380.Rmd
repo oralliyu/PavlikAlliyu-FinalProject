@@ -502,6 +502,7 @@ Graph_3 <-
 plot(Graph_3)
 
 ```
+Graph 3 shows the number of investigations in child abuse cases over 5 years. An interesting observation is that the same states that spiked in graph 1 - California, Florida, Michigan, New York, and Texas - also spike in this graph. 2015 seems to have the highest number of investigations most consistently. 
 
 ## Graph 4
 
