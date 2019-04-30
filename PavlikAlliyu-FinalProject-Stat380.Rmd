@@ -545,33 +545,6 @@ str(Stories)
 
 ```
 
-
-
-
-
-# This is what is left to do:
-
-So, I am terrible at coding. Let me know if it is okay if you work on coding the stuff below that is left. I tried to do my best with what I could. I have ideas for each, I just dont know how to write the code. If you do a lot of the coding, I can take care of explaing everything, narrarating, and the guidance document. Thanks! Also, if you can't figure the rest of the stuff out, or feel like I should do more work, let me know! just shoot me a text when you are done working and I'll go through and narrate and all that jazz. 
-
-## Data Wrangling Portion
-* Use of regular expressions 
-    + Trying to import article on abuse
-* User-defined functions    
-* Loops and/or control flow (DONE)    
-    + See if you can find a way to create a function to remove even rows, For example lines 99 and any others with this same issue
-
-## Data Visualization
-
-Can you check my graphs to make sure they meet the requirements please ?
-
-
-## Data Analysis
-
-* Statistical modeling/Supervised learning
-* Unsupervised learning
-* Analysis of text data
-test
-
 ### Unsupervised Learning
 
 Maltreatment Type by State
@@ -718,7 +691,25 @@ Question: Which year needed the most attention?
 favstats( ~ perpetrator_total$`2011`)
 ```
 
+# What's left
 
+## Data Wrangling Portion
+* Use of regular expressions 
+    + Trying to import article on abuse (DONE)
+* User-defined functions    
+* Loops and/or control flow (DONE)    
+    + See if you can find a way to create a function to remove even rows, For example lines 99 and any others with this same issue
+
+## Data Visualization
+
+Can you check my graphs to make sure they meet the requirements please ?
+
+
+## Data Analysis
+
+* Statistical modeling/Supervised learning
+* Unsupervised learning (DONE)
+* Analysis of text data
 
 
 
