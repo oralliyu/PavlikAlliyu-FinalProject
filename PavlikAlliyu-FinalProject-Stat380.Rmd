@@ -710,13 +710,12 @@ str(mal_pca)
 
 ```{r}
 # First two principal components
-
 (-1) * mal_pca$rotation[, 1:2] %>%
   round(2)
 
 ```
 ```{r}
-
+# View head
 head(mal_pca$x)
 
 ```
@@ -735,10 +734,12 @@ mal_pca$x %>%
   ggtitle("2-Dimensional Representation of Maltreatment by State")
 
 ```
+Here we see a plot of the PCA data. This shows the best vector from PCA per each state.
 
 ### Circle Correlations Plot
 
 ```{r}
+# Creat function
 circle <- function(center = c(0, 0), npoints = 100) {
     r = 1
     tt = seq(0, 2 * pi, length = npoints)
@@ -780,7 +781,7 @@ ggplot() +
 ### Scree Plot (Maltreatment Type Data)
 
 ```{r}
-
+# Get data ready for scree plot
 mal_pve <- 
   data.frame(sd = mal_pca$sdev) %>%
   rownames_to_column() %>%
@@ -818,8 +819,6 @@ This plot shows that 4 components results in variance close to ~ 90%. Therefore,
 
 ### Statistical Modeling
 
-Research Question: Which years are associated with the total number of perpretators for the year in the DMV?
-
 #### Data Preparation
 
 ```{r}
@@ -840,17 +839,18 @@ nrow(train)
 ```
 
 ```{r}
-
+# View test set
 test <- perpetrator_total[test_idx, ]    # test set cases only
 
 nrow(test)
 
 ```
 
+Here we have made a test data set and viewed how many rows the set had.
 
+#### Moving on with test analysis
 
-
-
+Normally with statistical modeling you would use a training set to create a model to predict events or occurences. Once that model has its finishing touches, one would use all the data provided to make a final test run through the model and make predictive conclusions. We made the decision not to move on with our analysis and predictive modeling due to ethicical reasoning. We feel that predicting a negative topic such as child abuse could be hurtful and sensitive to some people. We also were not given permission to predict things such as this and would not be using our coding "power" for a greater good by possibly promoting more abuse. 
 
 
 
