@@ -40,6 +40,7 @@ circle <- function(center = c(0, 0), npoints = 100) {
     return(data.frame(x = xx, y = yy))
 }
 
+
 ```
 
 # Data Table One
