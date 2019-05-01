@@ -24,7 +24,6 @@ library(janeaustenr)
 library(wordcloud)
 
 
-
 # Add data 
 raw_fed_data <- 
   read_csv("dif source join.csv")
@@ -40,7 +39,6 @@ circle <- function(center = c(0, 0), npoints = 100) {
     yy = center[1] + r * sin(tt)
     return(data.frame(x = xx, y = yy))
 }
-corcir = circle(c(0, 0), npoints = 100)
 
 ```
 
@@ -414,7 +412,7 @@ referral_type$Total <- referral_type$Screen_in + referral_type$Screen_out # Add 
 # Join Tables From Different Sources
 
 ```{r}
-# Make one big messy table
+# Make one big table
 All_data <-
   fed_data %>%
   full_join(by = "State", case_type) %>%
@@ -495,7 +493,7 @@ Graph_2 <-
 plot(Graph_2)
 
 ```
-Graph number 2 compares child fatalities across 5 years versus 1 year like graph 1. The color of dots that seem to be the highest fatality year are army green, purple, and green. These correspond to 2012, 2013, and 2015. Two state ids seem to stick out being 1 and 43, which are Alabama and Texas.
+Graph number 2 compares child fatalities across 5 years, versus 1 year like graph 1. The color of dots that seem to be the highest fatality year are army green, purple, and green. These correspond to 2012, 2013, and 2015. Two state ids seem to stick out with higher fatalities, being 1 and 43, which are Alabama and Texas.
 
 ## Graph 3 
 
@@ -601,11 +599,13 @@ margaret_story_analysis <-
   unnest_tokens(word, text)
 
 ```
+Throughout the past few code chunks, we have cleaned up the text document that contains stories about child abuse and chose one story in particular- Margaret. Her story relays to sexual abuse and how she worries her children will react to their abusive father later in life. In the next section of code, we will see which words are most prominent throughout the story and if they can provide any more insight into her story. 
+
 
 #### Token Frequency
 
 ```{r}
-
+# See word counts
 margaret_story_analysis %>%
   count(word, sort = TRUE)
 
@@ -613,7 +613,6 @@ margaret_story_analysis %>%
 
 ```{r}
 # Load stop word list
-
 data("stop_words")
 head(stop_words)
 tail(stop_words)
@@ -621,6 +620,7 @@ tail(stop_words)
 ```
 
 ```{r}
+# View word count table
 margaret_story_analysis <-
   margaret_story_analysis %>%
   filter(!(word %in% stop_words$word))
@@ -631,7 +631,7 @@ margaret_story_analysis %>%
 ```
 
 ```{r}
-
+# Create wordcloud
 margaret_story_analysis %>%
   filter(!(word %in% stop_words$word)) %>%
   count(word) %>%
@@ -850,44 +850,6 @@ nrow(test)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# What's left
-
-## Data Wrangling Portion
-* Use of regular expressions (???)
-    + Trying to import article on abuse 
-  
-
-## Data Analysis
-
-* Statistical modeling/Supervised learning 
-* Analysis of text data (DONE)
 
 
 
