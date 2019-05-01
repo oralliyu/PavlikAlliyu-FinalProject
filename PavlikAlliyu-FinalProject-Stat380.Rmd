@@ -18,6 +18,8 @@ library(dplyr)
 library(tidyverse)
 library(mdsr)
 library(mosaic)
+library(stringr)
+
 
 # Add data 
 raw_fed_data <- 
@@ -27,6 +29,14 @@ NCANDS <-
 
 # User-defined functions
 ## circle
+circle <- function(center = c(0, 0), npoints = 100) {
+    r = 1
+    tt = seq(0, 2 * pi, length = npoints)
+    xx = center[1] + r * cos(tt)
+    yy = center[1] + r * sin(tt)
+    return(data.frame(x = xx, y = yy))
+}
+corcir = circle(c(0, 0), npoints = 100)
 
 ```
 
@@ -532,23 +542,45 @@ Graph 4 shows the number of victims suffering from each type of abuse over the s
 
 https://www.nspcc.org.uk/what-we-do/childrens-stories-about-abuse/ 
 
-This website provides different childs' abuse stories. I have a collection of 5 abuse stories compiled into a word document
+This website provides different childs' abuse stories. We have gathered a collection of 5 abuse stories compiled into a word document
 
 ```{r}
 # Input text for analysis 
 Stories <- 
   read.delim("Child abuse stories.txt", header = FALSE, fill = TRUE)
 
+# Note it is being stored as a data frame of length 1
 str(Stories)
+
+length(Stories)
 
 ```  
 
 ```{r}
+# str_replace returns a character vector
 Stories  <-
   Stories$V1 %>%
-  gsub(pattern = "\\<", replacement = "")
+  str_replace_all("(\x92)+", "'") %>% 
+  str_replace_all("(\x93)+", "'") 
+
+str(Stories)
+length(Stories)
 
 ```
+
+
+```{r}
+# Subset Margaret's story
+Stories[c(1:14)]
+
+```
+
+```{r}
+# Doesn't look good
+tail(Stories)
+```
+
+
 
 ### Unsupervised Learning
 
@@ -675,7 +707,11 @@ mal_pve %>%
   ylab("Proportion of Variance Explained") + 
   ggtitle("Scree Plot of Principal Components for Maltreatment Type Data") 
 
-  
+```
+
+The plot above shows that ~ 4 components explains around 89% variance in the data set. In order words, using PCA we have reduced 7 predictors to 4 without compromising much on explained variance. This is the power of PCA. Let's confirm by plotting a cumulative variance plot. This will give us a clear picture of number of components.
+
+```{r}
 # cumulative PVE plot
 mal_pve %>%
   ggplot(aes(x = rowname, y = cusum)) + 
@@ -686,15 +722,95 @@ mal_pve %>%
 
 ```
 
-According to the PVE graph, about 4 principal components is the minimum number in order to do a good job representing the data.
+This plot shows that 4 components results in variance close to ~ 90%. Therefore, in this case, we’ll select number of components as 4 [PC1 to PC4] and proceed to the modeling stage. For modeling, we’ll use these 4 components as predictor variables and follow the normal procedures.
+
+## Data Analysis
 
 ### Statistical Modeling
 
-Question: Which year needed the most attention?
+Research Question: Which years are associated with the total number of perpretators for the year in the DMV?
+
+#### Data Preparation
 
 ```{r}
-favstats( ~ perpetrator_total$`2011`)
+# set RNG seed for reproducible results
+set.seed(622) 
+
+# partition the data
+n <- nrow(perpetrator_total)
+
+test_idx <- 
+  sample.int(n, size = round(0.25 * n))  # select row numbers for the test set
+
+train <-
+  perpetrator_total[-test_idx, ]  # exclude the test set cases
+
+nrow(train)
+
 ```
+
+```{r}
+
+test <- perpetrator_total[test_idx, ]    # test set cases only
+
+nrow(test)
+
+```
+
+```{r}
+# Exploratory Data Analysis
+
+favstats(~ 2014["Delaware"], data = train)
+
+```
+
+```{r}
+
+favstats(~ 2012, data = train)
+
+```
+
+```{r}
+
+favstats(~ 2013, data = train)
+
+```
+
+```{r}
+
+favstats(~ 2014, data = train)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # What's left
 
