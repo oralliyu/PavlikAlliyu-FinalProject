@@ -19,6 +19,9 @@ library(tidyverse)
 library(mdsr)
 library(mosaic)
 library(stringr)
+library(tidytext)
+library(janeaustenr)
+
 
 
 # Add data 
@@ -571,13 +574,48 @@ length(Stories)
 
 ```{r}
 # Subset Margaret's story
-Stories[c(1:14)]
+margaret_story <-
+  data.frame(Stories[c(2:14)]) %>%
+  mutate(text = Stories.c.2.14..) %>%
+  select(- Stories.c.2.14..)
+
+head(margaret_story)
 
 ```
 
 ```{r}
-# Doesn't look good
-tail(Stories)
+# unnest_tokens expects a character vector
+text <-
+  margaret_story$text %>%
+  as.character()
+
+# Create a data frame
+text_df <-
+  data_frame(line = 1:13, text = text)
+
+text_df
+
+margaret_story_analysis <-
+  text_df %>%
+  unnest_tokens(word, text)
+
+```
+
+#### Token Frequency
+
+```{r}
+
+margaret_story_analysis %>%
+  count(word, sort = TRUE)
+
+```
+
+```{r}
+# Load stop word list
+
+
+
+
 ```
 
 
