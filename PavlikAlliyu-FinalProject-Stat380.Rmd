@@ -21,6 +21,7 @@ library(mosaic)
 library(stringr)
 library(tidytext)
 library(janeaustenr)
+library(wordcloud)
 
 
 
@@ -613,10 +614,60 @@ margaret_story_analysis %>%
 ```{r}
 # Load stop word list
 
+data("stop_words")
+head(stop_words)
+tail(stop_words)
+
+```
+
+```{r}
+margaret_story_analysis <-
+  margaret_story_analysis %>%
+  filter(!(word %in% stop_words$word))
+
+margaret_story_analysis %>%
+  count(word, sort = TRUE)
+
+```
+
+```{r}
+
+margaret_story_analysis %>%
+  filter(!(word %in% stop_words$word)) %>%
+  count(word) %>%
+  with(., wordcloud(word, n, max.words = 45))
 
 
 
 ```
+
+```{r}
+data("sentiments")
+head(sentiments, 10)
+tail(sentiments, 10)
+```
+
+```{r}
+get_sentiments("nrc") %>%
+  group_by(sentiment) %>%
+  summarise(N= n()) %>%
+  arrange(desc(N))
+```
+
+#### Sentiment Analysis on Margaret's Story
+
+```{r}
+
+nrc_fear <-
+  get_sentiments("nrc") %>%
+  filter(sentiment == "fear")
+
+margaret_story_analysis %>%
+  inner_join(nrc_fear) %>%
+  count(word, sort = TRUE)
+
+```
+
 
 
 
