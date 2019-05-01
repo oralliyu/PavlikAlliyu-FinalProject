@@ -846,30 +846,6 @@ nrow(test)
 
 ```
 
-```{r}
-# Exploratory Data Analysis
-
-favstats(~ 2014["Delaware"], data = train)
-
-```
-
-```{r}
-
-favstats(~ 2012, data = train)
-
-```
-
-```{r}
-
-favstats(~ 2013, data = train)
-
-```
-
-```{r}
-
-favstats(~ 2014, data = train)
-
-```
 
 
 
@@ -911,7 +887,7 @@ favstats(~ 2014, data = train)
 ## Data Analysis
 
 * Statistical modeling/Supervised learning 
-* Analysis of text data 
+* Analysis of text data (DONE)
 
 
 
