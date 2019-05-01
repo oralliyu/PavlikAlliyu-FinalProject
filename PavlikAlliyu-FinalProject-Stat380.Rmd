@@ -637,27 +637,30 @@ margaret_story_analysis %>%
   count(word) %>%
   with(., wordcloud(word, n, max.words = 45))
 
-
-
 ```
+This wordcloud shows some of the words that occured the most in Margaret's story. It is not surprising to see words such as "children", "abuse", and "abusive" show up in this context. But is there a way to see how many negative words were in the story? Refer to the following code.
 
 ```{r}
+# Load sentiments table
 data("sentiments")
 head(sentiments, 10)
 tail(sentiments, 10)
+
 ```
 
 ```{r}
+# View sentiments table
 get_sentiments("nrc") %>%
   group_by(sentiment) %>%
   summarise(N= n()) %>%
   arrange(desc(N))
+
 ```
 
 #### Sentiment Analysis on Margaret's Story
 
 ```{r}
-
+# Join two tables together
 nrc_fear <-
   get_sentiments("nrc") %>%
   filter(sentiment == "fear")
@@ -667,9 +670,7 @@ margaret_story_analysis %>%
   count(word, sort = TRUE)
 
 ```
-
-
-
+Here we can see all the negative words that showed up in Margaret's story. "Abuse", "change", and "violence" are the top three words and make sense for the context they are used in. While there is a low number of occurences, it is best to keep in mind that these were short stories. 
 
 ### Unsupervised Learning
 
