@@ -73,19 +73,23 @@ output: html_notebook
 
 *Description: Clear demonstration of proficiency should include proper use of 3 out of the following 4 topics from class: (+) statistical modeling/supervised learning (+) unsupervised learning (+) user-defined simulations (+) analysis of text data (+) R tools for "big data"*
 
-(A) .Rmd Line number(s) for statistical modeling/supervised learning:  
+(A) .Rmd Line number(s) for statistical modeling/supervised learning:
+    + Lines 827-854
 
 
 (B) .Rmd Line number(s) for unsupervised learning: 
-585-708
+    + Lines 689-813
 
 (C) .Rmd Line number(s) for user-defined simulation(s): 
+    + N/A
 
 
 (D) .Rmd Line number(s) for analysis of text data: 
+    + Lines 598-671
 
 
 (E) .Rmd Line number(s) for R tools for "big data": 
+    + N/A
 
 
 
