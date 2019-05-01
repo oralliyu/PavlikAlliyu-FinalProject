@@ -31,22 +31,25 @@ output: html_notebook
     + Lines 263-270
     + Lines 654-657
 
-
 (B) .Rmd Line number(s) for a spread & gather (or equivalent): 
-    +
-
+    + Line 81
+    + Lines 110-111
+    + Line 223
+    
 (C) .Rmd Line number(s) for use of regular expressions: 
-
-
+    + Lines 564-567
+    
 (D) .Rmd Line number(s) for use of user-defined functions: 
+    + Lines 744-751
 
 
 (E) .Rmd Line number(s) for use of loops and/or control flow: 
-101-109
-165-174
-212-220
+    + Lines 119-123
+    + Lines 182-187
+    + Lines 230-234
 
 (F) .Rmd Line number(s) for use of vectorized functions: 
+    + N/A
 
 
 ### Data Visualization (all 4 required)
